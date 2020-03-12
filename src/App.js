@@ -10,9 +10,8 @@ function App() {
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <h1>Meme Generator</h1>
-        <div>start with a basic meme template:</div>
-        <MemeTemplate />
       </header>
+      <MemeTemplate />
     </div>
   );
 }
