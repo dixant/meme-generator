@@ -113,14 +113,13 @@ class MemeTemplate extends React.PureComponent {
             case "wa":
                 if(navigator.share !== undefined){
                     navigator.share({
-                      title: "title",
-                      text: "Hello World",
-                      url: this.state.currentMemeData.sharableMeme,
-                      files:document.getElementById("memeImg")
+                      title: "Meme",
+                      text: this.state.currentMemeData.cmData.name,
+                      url: this.state.currentMemeData.sharableMeme
                     }).then(() => console.log('Successful share'))
-                    .catch(error => alert('Error sharing:', error));
+                    .catch(error => console.log('Error sharing:', error));
                 }
-                window.open(`whatsapp://send?src=${encodeURIComponent(this.state.currentMemeData.sharableMeme)}`, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');
+                /*window.open(`whatsapp://send?src=${encodeURIComponent(this.state.currentMemeData.sharableMeme)}`, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');*/
             break;
             case "tw":
                 window.open(`https://twitter.com/share?url=${this.state.currentMemeData.sharableMeme}`, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');
