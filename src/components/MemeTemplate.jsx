@@ -11,7 +11,6 @@ const MemeDraw = props => {
     )
 }
 const MemeModal = props => {
-    console.log(props);
     let { text0, text1, sharableMeme } = props.data;
     let { name, url } = props.data.cmData;
     let { clickEvent, createMemeEvent, changeHandler, shareMeme } = props;
@@ -24,17 +23,17 @@ const MemeModal = props => {
                 <form className="createform">
                     <label>
                         Text0:</label>
-                        <textarea value={text0} onChange={changeHandler} type="text" name="text0" id="text0"></textarea>
-                    
+                    <textarea value={text0} onChange={changeHandler} type="text" name="text0" id="text0"></textarea>
+
                     <br />
                     <label>
                         Text1: </label>
-                        <textarea value={text1} onChange={changeHandler} type="text" name="text1" id="text1"></textarea>
-                   
+                    <textarea value={text1} onChange={changeHandler} type="text" name="text1" id="text1"></textarea>
+
                     {sharableMeme.length <= 0 ?
                         <div className="memeImg"><img alt={name} src={url} style={{ width: 200, height: 200 }} /></div>
                         :
-                        <div id="memeImg" className="memeImg"><img alt={name} src={sharableMeme} style={{ width: 200, height: 200 }} /></div>}
+                        <div className="memeImg"><input id="memeImg" type="image" alt={name} src={sharableMeme} style={{ width: 200, height: 200 }} /></div>}
 
                     <div>
                         <input type="button" className="creatememe" onClick={createMemeEvent} value="Create Meme" />
@@ -106,28 +105,43 @@ class MemeTemplate extends React.PureComponent {
     }
     shareMeme(event) {
         event.stopPropagation();
-        switch(event.currentTarget.name){
+        switch (event.currentTarget.name) {
             case "fb":
                 window.open(`https://www.facebook.com/sharer/sharer.php?u=${this.state.currentMemeData.sharableMeme}`, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');
-            break;
+                break;
             case "wa":
-                if(navigator.share !== undefined){
-                    navigator.share({
-                      title: "Meme",
-                      text: this.state.currentMemeData.cmData.name,
-                      url: this.state.currentMemeData.sharableMeme
-                    }).then(() => console.log('Successful share'))
-                    .catch(error => console.log('Error sharing:', error));
-                }
+                let url = encodeURIComponent(`${this.state.currentMemeData.sharableMeme}`);
+                console.log(url)
+                fetch(this.state.currentMemeData.sharableMeme)
+                    .then(function (response) {
+                        return response.blob()
+                    })
+                    .then(function (blob) {
+                        // here the image is a blob
+                        console.log(blob);
+                        if (navigator.share) {
+                            navigator.share({
+                                title: "Meme",
+                                text: this.state.currentMemeData.cmData.name,
+                                url: url,
+                                file: blob
+                            }).then(() => console.log('Successful share'))
+                                .catch(error => console.log('Error sharing:', error));
+                        }
+                        else {
+                            console.log("Web Share API is not supported in your browser.")
+                        }
+                    });
+
                 /*window.open(`whatsapp://send?src=${encodeURIComponent(this.state.currentMemeData.sharableMeme)}`, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');*/
-            break;
+                break;
             case "tw":
                 window.open(`https://twitter.com/share?url=${this.state.currentMemeData.sharableMeme}`, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');
-            break;
+                break;
             default:
                 break;
         }
-        
+
         //return false;
     }
     closeModal(event) {
