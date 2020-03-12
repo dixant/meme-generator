@@ -111,15 +111,15 @@ class MemeTemplate extends React.PureComponent {
                 window.open(`https://www.facebook.com/sharer/sharer.php?u=${this.state.currentMemeData.sharableMeme}`, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');
             break;
             case "wa":
-                
-                  /*  navigator.share({
+                if(navigator.share !== undefined){
+                    navigator.share({
                       title: "title",
                       text: "Hello World",
                       url: this.state.currentMemeData.sharableMeme,
                       files:document.getElementById("memeImg")
                     }).then(() => console.log('Successful share'))
-                    .catch(error => alert('Error sharing:', error));*/
-                
+                    .catch(error => alert('Error sharing:', error));
+                }
                 window.open(`whatsapp://send?src=${encodeURIComponent(this.state.currentMemeData.sharableMeme)}`, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');
             break;
             case "tw":
